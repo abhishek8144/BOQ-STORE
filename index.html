@@ -54,8 +54,8 @@ footer{text-align:center;padding:25px;color:#748293;background:#fff;font-size:13
 <footer>© <span id="year"></span> Civil Tools · Digital product · Support: update-this-email@example.com</footer>
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
-const API_BASE = "https://YOUR-RENDER-SERVICE.onrender.com"; // Replace with your Render backend URL.
-const RAZORPAY_KEY_ID = "YOUR_RAZORPAY_KEY_ID"; // Public Key ID only. Never put Key Secret here.
+const API_BASE = "https://boq-store-backend.onrender.com";
+  const RAZORPAY_KEY_ID = "rzp_test_xxxxxxxxxx";
 document.getElementById("year").textContent = new Date().getFullYear();
 const button = document.getElementById("buy"), statusBox = document.getElementById("status");
 button.addEventListener("click", async () => {
