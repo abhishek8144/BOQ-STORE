@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Professional BOQ Excel | ₹299</title>
+<meta name="description" content="Professional 123-item construction BOQ Excel workbook with quantity-based automatic costing.">
+<style>
+:root{--navy:#10243a;--blue:#1769aa;--gold:#f3b544;--bg:#f4f7fb}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,Arial,sans-serif;color:var(--navy);background:var(--bg)}
+header{padding:20px max(6%,calc((100% - 1120px)/2));background:#fff;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #e5ebf2}
+.brand{font-weight:850;font-size:21px;letter-spacing:.4px}.brand span{color:var(--blue)}
+.hero{max-width:1120px;margin:54px auto;padding:0 24px;display:grid;grid-template-columns:1.2fr .8fr;gap:40px;align-items:center}
+.tag{display:inline-block;background:#e4f1ff;color:#145a91;padding:8px 13px;border-radius:30px;font-size:13px;font-weight:700}
+h1{font-size:clamp(36px,5vw,58px);line-height:1.06;margin:18px 0}h1 em{color:var(--blue);font-style:normal}
+.lead{font-size:18px;line-height:1.7;color:#526477;max-width:650px}
+.card{background:#fff;border:1px solid #e4eaf1;border-radius:22px;padding:28px;box-shadow:0 18px 55px #19365312}
+.price{font-size:46px;font-weight:850;margin:6px 0}.price small{font-size:16px;color:#7a8795;font-weight:500}
+ul{padding-left:21px;line-height:2;color:#42566a}.btn{width:100%;border:0;border-radius:12px;background:var(--blue);color:white;padding:17px;font-size:17px;font-weight:800;cursor:pointer}
+.btn:disabled{opacity:.6;cursor:wait}.note{font-size:12px;color:#788797;line-height:1.5;margin-top:13px}
+section{max-width:1120px;margin:0 auto 60px;padding:0 24px}.features{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.feature{background:white;padding:22px;border:1px solid #e5ebf2;border-radius:16px}.feature b{display:block;margin-bottom:8px}
+footer{text-align:center;padding:25px;color:#748293;background:#fff;font-size:13px}
+#status{margin-top:12px;font-size:14px;color:#a33;white-space:pre-wrap}
+@media(max-width:760px){.hero{grid-template-columns:1fr;margin:30px auto}.features{grid-template-columns:1fr}header{padding:18px 22px}}
+</style>
+</head>
+<body>
+<header><div class="brand">CIVIL <span>TOOLS</span></div><div>Secure checkout · Instant download</div></header>
+<main class="hero">
+<div>
+<span class="tag">CONSTRUCTION ESTIMATING TOOL</span>
+<h1>Prepare BOQs faster.<br><em>Estimate with clarity.</em></h1>
+<p class="lead">A ready-to-use Excel BOQ workbook for construction professionals. Enter quantities and let the workbook calculate item amounts and the project total automatically.</p>
+<div class="features" style="margin-top:25px">
+<div class="feature"><b>123 BOQ activities</b><span>From preliminaries and foundation to finishes and external works.</span></div>
+<div class="feature"><b>Quantity-based totals</b><span>Enter quantities; amounts calculate automatically.</span></div>
+<div class="feature"><b>Editable workbook</b><span>Adapt quantities and rates to your project requirements.</span></div>
+</div>
+</div>
+<aside class="card">
+<span class="tag">ONE-TIME PURCHASE</span>
+<div class="price">₹299 <small>only</small></div>
+<p style="color:#65778a">Pay once and download the Excel workbook.</p>
+<ul><li>123 measured BOQ items</li><li>Final unit rate reference</li><li>Automatic amount calculations</li><li>Excel format (.xlsx)</li><li>Instant download after verified payment</li></ul>
+<button id="buy" class="btn">Buy & Download — ₹299</button>
+<div id="status" role="status"></div>
+<p class="note">Rates are indicative estimating references, not a substitute for site verification or local supplier/subcontractor quotations. GST and project-specific adjustments may apply.</p>
+</aside>
+</main>
+<section><h2>How it works</h2><div class="features">
+<div class="feature"><b>1. Make payment</b>Complete the secure Razorpay checkout.</div>
+<div class="feature"><b>2. Verify securely</b>Your payment is verified by the store server.</div>
+<div class="feature"><b>3. Download</b>The Excel file becomes available after successful verification.</div>
+</div></section>
+<footer>© <span id="year"></span> Civil Tools · Digital product · Support: update-this-email@example.com</footer>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+const API_BASE = "https://YOUR-RENDER-SERVICE.onrender.com"; // Replace with your Render backend URL.
+const RAZORPAY_KEY_ID = "YOUR_RAZORPAY_KEY_ID"; // Public Key ID only. Never put Key Secret here.
+document.getElementById("year").textContent = new Date().getFullYear();
+const button = document.getElementById("buy"), statusBox = document.getElementById("status");
+button.addEventListener("click", async () => {
+  statusBox.textContent = "";
+  if (API_BASE.includes("YOUR-") || RAZORPAY_KEY_ID.includes("YOUR_")) {
+    statusBox.textContent = "Store setup is not complete yet. Please contact the seller.";
+    return;
+  }
+  button.disabled = true; button.textContent = "Preparing secure checkout…";
+  try {
+    const orderRes = await fetch(`${API_BASE}/api/create-order`, {method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({})});
+    const order = await orderRes.json();
+    if (!orderRes.ok) throw new Error(order.error || "Could not create order.");
+    const options = {
+      key: RAZORPAY_KEY_ID, amount: order.amount, currency: order.currency,
+      name: "Civil Tools", description: "Professional 123-Item BOQ Excel Workbook",
+      order_id: order.id,
+      handler: async function(response) {
+        statusBox.style.color = "#176b37"; statusBox.textContent = "Verifying payment…";
+        try {
+          const verifyRes = await fetch(`${API_BASE}/api/verify-payment`, {
+            method:"POST",headers:{"Content-Type":"application/json"},
+            body:JSON.stringify(response)
+          });
+          const verified = await verifyRes.json();
+          if (!verifyRes.ok) throw new Error(verified.error || "Payment verification failed.");
+          statusBox.textContent = "Payment verified. Your download is starting…";
+          window.location.href = `${API_BASE}${verified.downloadUrl}`;
+        } catch(e) { statusBox.style.color="#a33"; statusBox.textContent = e.message + " If money was deducted, contact support with your Razorpay payment ID."; }
+      },
+      modal:{ ondismiss:function(){statusBox.textContent="Checkout closed. No download was issued.";}},
+      theme:{color:"#1769aa"}
+    };
+    new Razorpay(options).open();
+  } catch(e) { statusBox.textContent = e.message; }
+  finally { button.disabled = false; button.textContent = "Buy & Download — ₹299"; }
+});
+</script>
+</body></html>
